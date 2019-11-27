@@ -17,7 +17,7 @@ public class Categoria {
         return codigo;
     }
 
-    public void setCodigo(Long codigo) {
+    public void setCodigo(long codigo) {
         this.codigo = codigo;
     }
 
@@ -34,7 +34,7 @@ public class Categoria {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Categoria categoria = (Categoria) o;
-        return codigo.equals(categoria.codigo);
+        return codigo == categoria.codigo;
     }
 
     @Override
