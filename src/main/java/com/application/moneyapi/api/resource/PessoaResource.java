@@ -1,8 +1,8 @@
 package com.application.moneyapi.api.resource;
 
 import com.application.moneyapi.api.event.RecursoCriadoEvent;
-import com.application.moneyapi.api.model.Categoria;
-import com.application.moneyapi.api.repository.CategoriaRepository;
+import com.application.moneyapi.api.model.Pessoa;
+import com.application.moneyapi.api.repository.PessoaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
@@ -16,20 +16,20 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/categorias")
-public class CategoriaResource {
+@RequestMapping("/pessoas")
+public class PessoaResource {
 
     @Autowired
-    private CategoriaRepository categoriaRepository;
+    private PessoaRepository pessoaRepository;
 
     /**
-     * Buscar todas as categorias
+     * Buscar todas as pessoas
      * salvas no banco de dados
      * @return
      */
-    @GetMapping //Buscar dados
-    public List<Categoria> listar(){
-        return categoriaRepository.findAll();
+    @GetMapping // Buscar todas as pessoas salvas
+    public List<Pessoa> listar(){
+        return pessoaRepository.findAll();
     }
 
     /**
@@ -38,10 +38,9 @@ public class CategoriaResource {
      * @return Retorna a informação buscado pelo código
      */
     @GetMapping("/{codigo}")
-    public Categoria buscarPeloCodigo(@PathVariable Long codigo){
-        return categoriaRepository.findOne(codigo);
+    public Pessoa buscarPeloCodigo(@PathVariable Long codigo){
+        return pessoaRepository.findOne(codigo);
     }
-
 
 
     @Autowired
@@ -49,7 +48,7 @@ public class CategoriaResource {
 
     /**
      * Pesistir dados no BD
-     * @param categoria Dado informado para persistir bi BD
+     * @param pessoa Dado informado para persistir bi BD
      * @param response
      * @Valid Usado na vaçidação dos campos
      * @return Retorna Locale do dado salvo
@@ -57,10 +56,16 @@ public class CategoriaResource {
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Categoria> criar(@Valid @RequestBody  Categoria categoria, HttpServletResponse response){
-        Categoria categoriaSalva = categoriaRepository.save(categoria);
-        publisher.publishEvent(new RecursoCriadoEvent(this, response, categoriaSalva.getCodigo()));
-        return ResponseEntity.status(HttpStatus.CREATED).body(categoriaSalva);
+    public ResponseEntity<Pessoa> criar(@Valid @RequestBody Pessoa pessoa, HttpServletResponse response){
+        Pessoa pessoaSalva = pessoaRepository.save(pessoa);
+        publisher.publishEvent(new RecursoCriadoEvent(this, response, pessoaSalva.getCodigo()));
+        return ResponseEntity.status(HttpStatus.CREATED).body(pessoaSalva);
+    }
+
+    @DeleteMapping("/{codigo}")
+    @ResponseStatus(HttpStatus.NO_CONTENT) //Retorna um código 204 - Ok mas sem retorno
+    public void remover(@PathVariable Long codigo){
+        pessoaRepository.delete(codigo);
     }
 
 }
