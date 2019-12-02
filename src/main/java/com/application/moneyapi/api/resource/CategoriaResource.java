@@ -25,7 +25,7 @@ public class CategoriaResource {
     /**
      * Buscar todas as categorias
      * salvas no banco de dados
-     * @return
+     * @return Retorna lista de todas categorias
      */
     @GetMapping //Buscar dados
     public List<Categoria> listar(){
@@ -50,7 +50,7 @@ public class CategoriaResource {
     /**
      * Pesistir dados no BD
      * @param categoria Dado informado para persistir bi BD
-     * @param response
+     * @param response requisição recebida
      * @Valid Usado na vaçidação dos campos
      * @return Retorna Locale do dado salvo
      *
@@ -61,6 +61,12 @@ public class CategoriaResource {
         Categoria categoriaSalva = categoriaRepository.save(categoria);
         publisher.publishEvent(new RecursoCriadoEvent(this, response, categoriaSalva.getCodigo()));
         return ResponseEntity.status(HttpStatus.CREATED).body(categoriaSalva);
+    }
+
+    @DeleteMapping("/{codigo}")
+    @ResponseStatus(HttpStatus.NO_CONTENT) //Retorna um código 204 - Ok mas sem retorno
+    public void remover(@PathVariable Long codigo){
+        categoriaRepository.delete(codigo);
     }
 
 }

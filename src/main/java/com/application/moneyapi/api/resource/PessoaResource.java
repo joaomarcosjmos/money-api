@@ -8,11 +8,9 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -25,7 +23,6 @@ public class PessoaResource {
     /**
      * Buscar todas as pessoas
      * salvas no banco de dados
-     * @return
      */
     @GetMapping // Buscar todas as pessoas salvas
     public List<Pessoa> listar(){
@@ -49,7 +46,7 @@ public class PessoaResource {
     /**
      * Pesistir dados no BD
      * @param pessoa Dado informado para persistir bi BD
-     * @param response
+     * @param response Recebe a requisição
      * @Valid Usado na vaçidação dos campos
      * @return Retorna Locale do dado salvo
      *
