@@ -3,8 +3,10 @@ package com.application.moneyapi.api.resource;
 import com.application.moneyapi.api.event.RecursoCriadoEvent;
 import com.application.moneyapi.api.model.Pessoa;
 import com.application.moneyapi.api.repository.PessoaRepository;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,8 +40,9 @@ public class PessoaResource {
      * @return Retorna a informação buscado pelo código
      */
     @GetMapping("/{codigo}")
-    public Pessoa buscarPeloCodigo(@PathVariable Long codigo){
-        return pessoaRepository.findOne(codigo);
+    public ResponseEntity<Pessoa> buscarPeloCodigo(@PathVariable Long codigo){
+        Pessoa pessoa = pessoaRepository.findOne(codigo);
+        return pessoa != null ? ResponseEntity.ok(pessoa) : ResponseEntity.notFound().build();
     }
 
 
@@ -66,6 +69,17 @@ public class PessoaResource {
     @ResponseStatus(HttpStatus.NO_CONTENT) //Retorna um código 204 - Ok mas sem retorno
     public void remover(@PathVariable Long codigo){
         pessoaRepository.delete(codigo);
+    }
+
+    @PutMapping("/{codigo}")
+    ResponseEntity<Pessoa> atualizar(@PathVariable Long codigo, @Valid @RequestBody Pessoa pessoa){
+        Pessoa pessoaSalva = pessoaRepository.findOne(codigo);
+        if (pessoaSalva == null){
+            throw new EmptyResultDataAccessException(1);
+        }
+        BeanUtils.copyProperties(pessoa, pessoaSalva, "codigo");
+        pessoaRepository.save(pessoaSalva);
+        return ResponseEntity.ok(pessoaSalva);
     }
 
 }
