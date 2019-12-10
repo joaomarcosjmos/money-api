@@ -3,6 +3,7 @@ package com.application.moneyapi.api.resource;
 import com.application.moneyapi.api.event.RecursoCriadoEvent;
 import com.application.moneyapi.api.model.Pessoa;
 import com.application.moneyapi.api.repository.PessoaRepository;
+import com.application.moneyapi.api.service.PessoaService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -21,6 +22,12 @@ public class PessoaResource {
 
     @Autowired
     private PessoaRepository pessoaRepository;
+
+    @Autowired
+    private PessoaService pessoaService;
+
+    @Autowired
+    private ApplicationEventPublisher publisher;
 
     /**
      * Buscar todas as pessoas
@@ -41,10 +48,6 @@ public class PessoaResource {
         Pessoa pessoa = pessoaRepository.findOne(codigo);
         return pessoa != null ? ResponseEntity.ok(pessoa) : ResponseEntity.notFound().build();
     }
-
-
-    @Autowired
-    private ApplicationEventPublisher publisher;
 
     /**
      * Pesistir dados no BD
@@ -70,12 +73,7 @@ public class PessoaResource {
 
     @PutMapping("/{codigo}")
     ResponseEntity<Pessoa> atualizar(@PathVariable Long codigo, @Valid @RequestBody Pessoa pessoa){
-        Pessoa pessoaSalva = pessoaRepository.findOne(codigo);
-        if (pessoaSalva == null){
-            throw new EmptyResultDataAccessException(1);
-        }
-        BeanUtils.copyProperties(pessoa, pessoaSalva, "codigo");
-        pessoaRepository.save(pessoaSalva);
+        Pessoa pessoaSalva = pessoaService.atualizar(codigo, pessoa);
         return ResponseEntity.ok(pessoaSalva);
     }
 
