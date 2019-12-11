@@ -38,11 +38,10 @@ public class CategoriaResource {
      * @return Retorna a informação buscado pelo código
      */
     @GetMapping("/{codigo}")
-    public Categoria buscarPeloCodigo(@PathVariable Long codigo){
-        return categoriaRepository.findOne(codigo);
+    public ResponseEntity<Categoria> buscarPeloCodigo(@PathVariable Long codigo){
+        Categoria categoria = categoriaRepository.findOne(codigo);
+        return categoria != null ? ResponseEntity.ok(categoria) : ResponseEntity.notFound().build();
     }
-
-
 
     @Autowired
     private ApplicationEventPublisher publisher;
