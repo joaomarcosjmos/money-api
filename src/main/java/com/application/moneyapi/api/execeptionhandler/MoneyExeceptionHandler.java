@@ -32,7 +32,7 @@ public class MoneyExeceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
 
         String mensagemUsuario = messageSource.getMessage("mensagem.invalida", null, LocaleContextHolder.getLocale());
-        String mensagemDensenvolvedor = ex.getCause().toString();
+        String mensagemDensenvolvedor = ex.getCause() != null ? ex.getCause().toString() : ex.toString();
         //List<Erro> erros = Arrays.asList(new Erro(mensagemDensenvolvedor, mensagemUsuario));
         List<Erro> erros = Collections.singletonList(new Erro(mensagemDensenvolvedor, mensagemUsuario));
         return handleExceptionInternal(ex, erros , headers, HttpStatus.BAD_REQUEST, request);
