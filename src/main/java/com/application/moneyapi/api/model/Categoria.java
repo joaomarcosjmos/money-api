@@ -1,10 +1,15 @@
 package com.application.moneyapi.api.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Objects;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "categoria")
 public class Categoria {
@@ -16,22 +21,6 @@ public class Categoria {
     @NotNull
     @Size(min = 3, max = 20)
     private String nome;
-
-    public Long getCodigo() {
-        return codigo;
-    }
-
-    public void setCodigo(long codigo) {
-        this.codigo = codigo;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
 
     @Override
     public boolean equals(Object o) {
