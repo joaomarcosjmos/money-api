@@ -1,9 +1,12 @@
 package com.application.moneyapi.api.event;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.context.ApplicationEvent;
 
 import javax.servlet.http.HttpServletResponse;
 
+@Getter
 public class RecursoCriadoEvent extends ApplicationEvent {
     private HttpServletResponse response;
     private Long codigo;
@@ -14,11 +17,4 @@ public class RecursoCriadoEvent extends ApplicationEvent {
         this.codigo = codigo;
     }
 
-    public HttpServletResponse getResponse() {
-        return response;
-    }
-
-    public Long getCodigo() {
-        return codigo;
-    }
 }
