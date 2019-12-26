@@ -70,7 +70,7 @@ public class MoneyExeceptionHandler extends ResponseEntityExceptionHandler {
 
     }
 
-    private List<Erro> criarListaDeErros(BindingResult bindingResult){
+    public List<Erro> criarListaDeErros(BindingResult bindingResult){
         List<Erro> erros = new ArrayList<>();
 
         for (FieldError fieldError : bindingResult.getFieldErrors()) {
@@ -87,7 +87,7 @@ public class MoneyExeceptionHandler extends ResponseEntityExceptionHandler {
         private String mensagemUsuario;
         private String mensagemDensenvolvedor;
 
-        private Erro(String mensagemDensenvolvedor, String mensagemUsuario) {
+        public Erro(String mensagemDensenvolvedor, String mensagemUsuario) {
             this.mensagemUsuario = mensagemUsuario;
             this.mensagemDensenvolvedor = mensagemDensenvolvedor;
         }
