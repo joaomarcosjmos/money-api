@@ -1,5 +1,6 @@
 package com.application.moneyapi.api.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
