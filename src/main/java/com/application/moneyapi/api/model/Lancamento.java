@@ -20,6 +20,7 @@ public class Lancamento {
 
     @NotNull
     private String descricao;
+
     @NotNull
     private BigDecimal valor;
 
@@ -32,7 +33,6 @@ public class Lancamento {
     @Column(name = "data_pagamento")
     private LocalDate dataPagamento;
 
-    @NotNull
     @Enumerated(EnumType.STRING)
     private TipoLancamento tipo;
 
