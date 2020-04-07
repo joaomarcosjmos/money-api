@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 @ControllerAdvice
 public class RefreshTokenPostProcessor implements ResponseBodyAdvice<OAuth2AccessToken> {
 
-    @Override
+    @Override // Só para para o próximo método quando suporte for "true"
     public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
         return returnType.getMethod().getName().equals("postAccessToken");
     }
@@ -31,9 +31,10 @@ public class RefreshTokenPostProcessor implements ResponseBodyAdvice<OAuth2Acces
         HttpServletRequest req = ((ServletServerHttpRequest) request).getServletRequest();
         HttpServletResponse resp = ((ServletServerHttpResponse) response).getServletResponse();
 
-        DefaultOAuth2AccessToken token = (DefaultOAuth2AccessToken) body;
+        DefaultOAuth2AccessToken token = (DefaultOAuth2AccessToken) body; // Cast feito para acessar o método setRefreshToken e colocar o valor null
 
         String refreshToken = body.getRefreshToken().getValue();
+
         adicionaRefreshTokenNoCookie(refreshToken, req, resp);
         removeRefreshTokenDoBody(token);
 
@@ -46,10 +47,10 @@ public class RefreshTokenPostProcessor implements ResponseBodyAdvice<OAuth2Acces
 
     private void adicionaRefreshTokenNoCookie(String refreshToken, HttpServletRequest req, HttpServletResponse resp) {
         Cookie refreshTokenCookie  = new Cookie("refreshToken", refreshToken);
-        refreshTokenCookie.setHttpOnly(true);
-        refreshTokenCookie.setSecure(false); //TODO: Mudar para true em produção
+        refreshTokenCookie.setHttpOnly(true); // Somente acessível como Cookie HTTP
+        refreshTokenCookie.setSecure(false); // Funciona apenas em HTTPS ? 0 or 1  //TODO: Mudar para true em produção
         refreshTokenCookie.setPath(req.getContextPath() + "/oauth/token");
-        refreshTokenCookie.setMaxAge(2592000);
+        refreshTokenCookie.setMaxAge(2592000); // Tempo de expiração em dias
         resp.addCookie(refreshTokenCookie);
     }
 }
