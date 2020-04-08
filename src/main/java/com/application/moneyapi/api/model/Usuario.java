@@ -21,6 +21,8 @@ public class Usuario {
 
     private String email;
 
+    private String senha;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "usuario_permissao", joinColumns = @JoinColumn(name = "codigo_usuario")
     , inverseJoinColumns = @JoinColumn(name = "codigo_permissao"))
