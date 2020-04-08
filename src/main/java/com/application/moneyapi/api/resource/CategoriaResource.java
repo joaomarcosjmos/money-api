@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -22,12 +23,16 @@ public class CategoriaResource {
     @Autowired
     private CategoriaRepository categoriaRepository;
 
+    @Autowired
+    private ApplicationEventPublisher publisher;
+
     /**
      * Buscar todas as categorias
      * salvas no banco de dados
      * @return Retorna lista de todas categorias
      */
     @GetMapping //Buscar dados
+    @PreAuthorize("hasAuthority('ROLE_PESQUISAR_CATEGORIA') and #oauth2.hasScope('read')") //Anotação usada para chamer as roles
     public List<Categoria> listar(){
         return categoriaRepository.findAll();
     }
@@ -38,13 +43,11 @@ public class CategoriaResource {
      * @return Retorna a informação buscado pelo código
      */
     @GetMapping("/{codigo}")
+    @PreAuthorize("hasAuthority('ROLE_PESQUISAR_CATEGORIA') and #oauth2.hasScope('read')") //Usado hasScope para definir o escopo
     public ResponseEntity<Categoria> buscarPeloCodigo(@PathVariable Long codigo){
         Categoria categoria = categoriaRepository.findOne(codigo);
         return categoria != null ? ResponseEntity.ok(categoria) : ResponseEntity.notFound().build();
     }
-
-    @Autowired
-    private ApplicationEventPublisher publisher;
 
     /**
      * Pesistir dados no BD
@@ -55,7 +58,7 @@ public class CategoriaResource {
      *
      */
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAuthority('ROLE_CADASTRAR_CATEGORIA') and #oauth2.hasScope('write')")
     public ResponseEntity<Categoria> criar(@Valid @RequestBody  Categoria categoria, HttpServletResponse response){
         Categoria categoriaSalva = categoriaRepository.save(categoria);
         publisher.publishEvent(new RecursoCriadoEvent(this, response, categoriaSalva.getCodigo()));

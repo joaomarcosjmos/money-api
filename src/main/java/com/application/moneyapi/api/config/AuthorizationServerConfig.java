@@ -25,21 +25,28 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.inMemory()
-                .withClient("angular")
-                .secret("@ngul@o")
-                .scopes("read", "write")
-                .authorizedGrantTypes("password", "refresh_token")
-                .accessTokenValiditySeconds(3600)
-                .refreshTokenValiditySeconds(3600 * 24); //24 horas ativo
+            .withClient("angular")
+            .secret("@ngul@o")
+            .scopes("read", "write")
+            .authorizedGrantTypes("password", "refresh_token")
+            .accessTokenValiditySeconds(3600)
+            .refreshTokenValiditySeconds(3600 * 24)
+        .and()
+            .withClient("mobile")
+            .secret("m0b@l@")
+            .scopes("read")
+            .authorizedGrantTypes("password", "refresh_token")
+            .accessTokenValiditySeconds(3600)
+            .refreshTokenValiditySeconds(3600 * 24); //24 horas ativo; //24 horas ativo
     }
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         endpoints
-                .tokenStore(tokenStore())
-                .reuseRefreshTokens(false) // Não permite que o usuário permaneça muito tempo com o mesmo token
-                .accessTokenConverter(accessTokenConverter())
-                .authenticationManager(authenticationManager);
+            .tokenStore(tokenStore())
+            .reuseRefreshTokens(false) // Não permite que o usuário permaneça muito tempo com o mesmo token
+            .accessTokenConverter(accessTokenConverter())
+            .authenticationManager(authenticationManager);
     }
 
     @Bean
