@@ -6,6 +6,7 @@ import com.application.moneyapi.api.execeptionhandler.MoneyExeceptionHandler;
 import com.application.moneyapi.api.model.Lancamento;
 import com.application.moneyapi.api.repository.LancamentoRepository;
 import com.application.moneyapi.api.repository.filter.LancamentoFilter;
+import com.application.moneyapi.api.repository.projection.ResumoLancamento;
 import com.application.moneyapi.api.service.Exception.PessoaInexistenteOuInativoException;
 import com.application.moneyapi.api.service.LancamentoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +47,12 @@ public class LancamentoResource {
         return lancamentoRepository.filtrar(lancamentoFilter, pageable);
     }
 
+    @GetMapping(params = "resumo") //Busca com paginação do resumo de lancamento
+    @PreAuthorize("hasAuthority('ROLE_PESQUISAR_LANCAMENTO') and #oauth2.hasScope('read')")
+    public Page<ResumoLancamento> resumir(LancamentoFilter lancamentoFilter, Pageable pageable){
+        return lancamentoRepository.resumir(lancamentoFilter, pageable);
+    }
+
     @GetMapping("/{codigo}")
     @PreAuthorize("hasAuthority('ROLE_PESQUISAR_LANCAMENTO') and #oauth2.hasScope('read')")
     public ResponseEntity<Lancamento> buscarPeloCodigo(@PathVariable Long codigo){
@@ -62,7 +69,6 @@ public class LancamentoResource {
      *
      */
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAuthority('ROLE_CADASTRAR_LANCAMENTO') and #oauth2.hasScope('write')")
     public ResponseEntity<Lancamento> criar(@Valid @RequestBody  Lancamento lancamento, HttpServletResponse response){
         Lancamento lancamentoSalva = lancamentoService.salvar(lancamento);
