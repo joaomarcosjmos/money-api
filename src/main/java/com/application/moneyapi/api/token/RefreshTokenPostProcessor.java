@@ -1,5 +1,7 @@
 package com.application.moneyapi.api.token;
 
+import com.application.moneyapi.api.config.property.ApplicationApiProperty;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -18,6 +20,9 @@ import javax.servlet.http.HttpServletResponse;
 
 @ControllerAdvice
 public class RefreshTokenPostProcessor implements ResponseBodyAdvice<OAuth2AccessToken> {
+
+    @Autowired
+    private ApplicationApiProperty applicationApiProperty;
 
     @Override // Só para para o próximo método quando suporte for "true"
     public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
@@ -48,7 +53,7 @@ public class RefreshTokenPostProcessor implements ResponseBodyAdvice<OAuth2Acces
     private void adicionaRefreshTokenNoCookie(String refreshToken, HttpServletRequest req, HttpServletResponse resp) {
         Cookie refreshTokenCookie  = new Cookie("refreshToken", refreshToken);
         refreshTokenCookie.setHttpOnly(true); // Somente acessível como Cookie HTTP
-        refreshTokenCookie.setSecure(false); // Funciona apenas em HTTPS ? 0 or 1  //TODO: Mudar para true em produção
+        refreshTokenCookie.setSecure(applicationApiProperty.getSeguranca().isEnableHttps()); // Funciona apenas em HTTPS ? 0 or 1  // Recebe atributo que identifica se é PDS ou LOCAL
         refreshTokenCookie.setPath(req.getContextPath() + "/oauth/token");
         refreshTokenCookie.setMaxAge(2592000); // Tempo de expiração em dias
         resp.addCookie(refreshTokenCookie);

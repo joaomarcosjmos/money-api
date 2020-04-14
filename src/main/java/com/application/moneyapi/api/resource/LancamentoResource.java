@@ -47,7 +47,7 @@ public class LancamentoResource {
         return lancamentoRepository.filtrar(lancamentoFilter, pageable);
     }
 
-    @GetMapping(params = "resumo") //Busca com paginação do resumo de lancamento
+    @GetMapping(params = "resumo") //Busca com paginação resumida de lancamento
     @PreAuthorize("hasAuthority('ROLE_PESQUISAR_LANCAMENTO') and #oauth2.hasScope('read')")
     public Page<ResumoLancamento> resumir(LancamentoFilter lancamentoFilter, Pageable pageable){
         return lancamentoRepository.resumir(lancamentoFilter, pageable);

@@ -37,6 +37,13 @@
             <optional>true</optional>
         </dependency>
 
+        <!--     Processor      -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+
         <!-- hibernte java8 suppor-->
         <dependency>
             <groupId>org.hibernate</groupId>

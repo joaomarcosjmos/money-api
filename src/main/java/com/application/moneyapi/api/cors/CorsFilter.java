@@ -1,5 +1,7 @@
 package com.application.moneyapi.api.cors;
 
+import com.application.moneyapi.api.config.property.ApplicationApiProperty;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -12,7 +14,9 @@ import java.io.IOException;
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class CorsFilter implements Filter {
-       private String origimPermitida = "http://localhost:8000"; //TODO: configurar para diferentes ambientes
+
+    @Autowired
+    private ApplicationApiProperty applicationApiProperty;
 
     @Override
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
@@ -20,10 +24,10 @@ public class CorsFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) resp;
 
-        response.setHeader("Access-Control-Allow-Origin", origimPermitida);
+        response.setHeader("Access-Control-Allow-Origin", applicationApiProperty.getOrigemPermitida());
         response.setHeader("Access-Control-Allow-Credentials", "true");
 
-        if("OPTIONS".equals(request.getMethod()) && origimPermitida.equals(request.getHeader("Origin"))){
+        if("OPTIONS".equals(request.getMethod()) && applicationApiProperty.getOrigemPermitida().equals(request.getHeader("Origin"))){
 
             response.setHeader("Access-Control-Allow-Methods", "POST, GET, DELETE, PUT, OPTIONS");
             response.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type, Accept");
