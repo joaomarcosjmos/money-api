@@ -1,9 +1,15 @@
-/target/
 
+/target/
 ### Intellij IDE ###
 /.idea/
 *.iws
 *.iml
 *.ipr
+
+# Sonarlint plugin
+.idea/**/sonarlint/
+
+# SonarQube Plugin
+.idea/**/sonarIssues.xml
 
 
