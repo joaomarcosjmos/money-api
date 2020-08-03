@@ -12,11 +12,14 @@ public class ApplicationApiProperty {
 
     private String origemPermitida = "http://localhost:8000";
 
+    @Getter
     private Seguranca seguranca = new Seguranca();
 
-    @Getter
-    @Setter
+
     public static class Seguranca{
+
+        @Getter
+        @Setter
         private boolean enableHttps;
     }
 
