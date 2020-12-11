@@ -13,13 +13,14 @@ import javax.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("/tokens")
-public class TokenResource {
+public class  TokenResource {
 
     @Autowired
     private ApplicationApiProperty applicationApiProperty;
 
     @DeleteMapping("/revoke")
     public void revoke(HttpServletRequest req, HttpServletResponse resp){
+
         Cookie cookie = new Cookie("refreshToken", null);
 
         cookie.setHttpOnly(true);
